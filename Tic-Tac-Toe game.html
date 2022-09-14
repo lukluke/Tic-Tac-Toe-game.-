@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <style type="text/css">
+      
+      #TicTacToe {
+  position: absoulte;
+  left: 50%
+}
+
+#TicTacToe button {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #ddd;
+}
+    </style>
+    <body>
+        <!-- start of your code -->
+     <div id="TicTacToe">
+    <button id="button0" v-on:click="play(0)"></button>
+    <button id="button1" v-on:click="play(1)"></button>
+    <button id="button2" v-on:click="play(2)"></button>
+    <br>
+    <button id="button3" v-on:click="play(3)"></button>
+    <button id="button4" v-on:click="play(4)"></button>
+    <button id="button5" v-on:click="play(5)"></button>
+    <br>
+    <button id="button6" v-on:click="play(6)"></button>
+    <button id="button7" v-on:click="play(7)"></button>
+    <button id="button8" v-on:click="play(8)"></button>
+    <p>{{message}}</p>
+    <a href="#" v-if="playAgain" v-on:click="reset">Play Again</a>
+  </div>
+
+        <!-- end of your code -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js'></script>
+        <script>
+            var app = new Vue({
+  /* start of your code */
+  el: "#TicTacToe",
+  data: {
+    isO: 0,
+    winning_combinations: [[0, 1, 2], 
+                            [3, 4, 5], 
+                            [6, 7, 8], 
+                            [0, 3, 6], 
+                            [1, 4, 7], 
+                            [2, 5, 8], 
+                            [0, 4, 8], 
+                            [2, 4, 6]],
+    // 0: player O, 1: player X                      
+    content: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
+    filled: 0,
+    message: "",  
+    playAgain: false,
+  },
+  created: function() {
+    let buttons = document.querySelectorAll("button") 
+    
+    buttons.forEach(button => {
+      button.innerHTML = "?"
+    })
+  },
+  methods: {
+    play: function(index) {
+      if(this.content[index] === "?" && !this.playAgain) {
+        if(this.isO % 2 === 0) {
+          document.getElementById(`button${index}`).innerHTML = "O"
+          this.content[index] = "O";
+        }
+        else {
+          document.getElementById(`button${index}`).innerHTML = "X"
+          
+          this.content[index] = "X"
+        }
+        
+        this.isO++
+        this.filled++
+        
+        this.isWin(this.content[index])
+        
+        if(this.filled == 9) {
+          this.message = "Draw Game"
+          this.playAgain = true
+        }
+      }
+    },
+    isWin: function(player) {
+      for(let i = 0; i < this.winning_combinations.length; i++) {
+        if(this.content[this.winning_combinations[i][0]] == player && this.content[this.winning_combinations[i][1]] == player && this.content[this.winning_combinations[i][2]] == player) {
+          this.message = `Player ${player} WON!`
+          this.playAgain = true
+        }
+      }
+    }, 
+    reset: function() {
+      this.isO = 0
+      this. content = ["?", "?", "?", "?", "?", "?", "?", "?", "?"]
+      this.filled = 0
+      this.message = ""  
+      this.playAgain = false
+      
+      let buttons = document.querySelectorAll("button")
+
+      buttons.forEach(button => {
+        button.innerHTML = "?"
+      })
+    }
+  }
+});
+
+
+            
+        </script>
+    </body>
+</html>
